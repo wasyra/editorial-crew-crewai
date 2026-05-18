@@ -119,29 +119,28 @@ El proyecto sigue una **arquitectura en capas**: presentación (Next.js), API (F
 
 ```mermaid
 flowchart TB
-    subgraph ui [Capa de presentación]
-        WEB[Next.js + VetaUI :3000]
-        ST[Streamlit :8501]
-        CLI[main.py CLI]
+    subgraph presentation [Capa de presentacion]
+        WEB["Next.js y VetaUI puerto 3000"]
+        ST["Streamlit puerto 8501"]
+        CLI["CLI main.py"]
     end
 
-    subgraph api [Capa API]
-        FAST[FastAPI :8001]
-        HEALTH[GET /api/health]
-        GEN[POST /api/generate]
+    subgraph api_layer [Capa API]
+        FAST["FastAPI puerto 8001"]
+        GEN["POST api generate"]
     end
 
-    subgraph orchestration [Orquestación CrewAI]
-        CREW[Crew · Process.sequential]
+    subgraph orchestration [Orquestacion CrewAI]
+        CREW["Crew Process sequential"]
         T1[research_task]
         T2[write_task]
         T3[edit_task]
     end
 
     subgraph agents [Agentes]
-        R[Investigador]
-        W[Redactor]
-        E[Editor]
+        AG_R[Investigador]
+        AG_W[Redactor]
+        AG_E[Editor]
     end
 
     subgraph external [Servicios externos]
@@ -150,23 +149,26 @@ flowchart TB
     end
 
     subgraph persistence [Persistencia]
-        OUT[output/YYYYMMDD_*]
-        LOG[logs/runs.log]
+        OUT["output con timestamp"]
+        LOG["logs runs.log"]
     end
 
-    WEB --> GEN
+    WEB --> FAST
+    FAST --> GEN
+    GEN --> CREW
     ST --> CREW
     CLI --> CREW
-    GEN --> CREW
-    FAST --> HEALTH
-    CREW --> T1 --> R
-    R --> TAV
-    R --> GEM
-    T1 -->|ResearchDossier| T2
-    T2 --> W --> GEM
-    T2 -->|borrador Markdown| T3
-    T3 --> E --> GEM
-    T3 -->|final Markdown| FAST
+    CREW --> T1
+    T1 --> AG_R
+    AG_R --> TAV
+    AG_R --> GEM
+    T1 --> T2
+    T2 --> AG_W
+    AG_W --> GEM
+    T2 --> T3
+    T3 --> AG_E
+    AG_E --> GEM
+    T3 --> FAST
     FAST --> WEB
     CREW --> OUT
     CREW --> LOG
@@ -220,19 +222,19 @@ sequenceDiagram
     participant T as Tavily
     participant G as Gemini
 
-    U->>W: tema + tono
-    W->>A: POST /api/generate
-    A->>C: run_editorial_crew(topic, tone)
-    C->>T: búsqueda noticias (Investigador)
+    U->>W: tema y tono
+    W->>A: POST api generate
+    A->>C: run editorial crew
+    C->>T: busqueda noticias
     T-->>C: resultados web
-    C->>G: dossier ResearchDossier
+    C->>G: dossier estructurado
     G-->>C: borrador LinkedIn
-    C->>G: revisión editor
-    G-->>C: feedback + post final
-    C->>C: guardar output/ + logs
+    C->>G: revision editor
+    G-->>C: post final
+    C->>C: guardar output y logs
     C-->>A: EditorialResult
-    A-->>W: JSON research, draft, final
-    W-->>U: pestañas + copiar LinkedIn
+    A-->>W: JSON research draft final
+    W-->>U: pestanas y copiar LinkedIn
 ```
 
 **Pasos internos de la crew:**
@@ -646,9 +648,9 @@ Tres agentes en fila, **una pasada cada uno**. El contexto de tareas anteriores 
 
 ```mermaid
 flowchart LR
-    R[Investigador<br/>Tavily + dossier] --> W[Redactor<br/>borrador LinkedIn]
-    W --> E[Editor<br/>feedback + post final]
-    E --> FIN[Fin]
+    AG_R["Investigador Tavily"] --> AG_W["Redactor borrador"]
+    AG_W --> AG_E["Editor post final"]
+    AG_E --> FIN[Fin]
 ```
 
 Orquestación: `Process.sequential` en `src/crew.py`.

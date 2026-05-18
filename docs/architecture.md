@@ -4,26 +4,26 @@
 
 ```mermaid
 flowchart TB
-    subgraph ui [Capa de presentación]
-        WEB[Next.js VetaUI :3000]
-        ST[Streamlit app.py :8501]
+    subgraph presentation [Capa de presentacion]
+        WEB["Next.js VetaUI puerto 3000"]
+        ST["Streamlit puerto 8501"]
     end
 
-    subgraph api [API]
-        FAST[FastAPI :8001]
+    subgraph api_layer [API]
+        FAST["FastAPI puerto 8001"]
     end
 
     subgraph orchestration [CrewAI]
-        CREW[Crew - Process.sequential]
+        CREW["Crew Process sequential"]
         T1[research_task]
         T2[write_task]
         T3[edit_task]
     end
 
     subgraph agents [Agentes]
-        R[Investigador]
-        W[Redactor]
-        E[Editor]
+        AG_R[Investigador]
+        AG_W[Redactor]
+        AG_E[Editor]
     end
 
     subgraph external [Servicios externos]
@@ -32,21 +32,24 @@ flowchart TB
     end
 
     subgraph persistence [Persistencia]
-        OUT[output/]
-        LOG[logs/runs.log]
+        OUT["output con timestamp"]
+        LOG["logs runs.log"]
     end
 
-    WEB -->|POST /api/generate| FAST
-    ST -->|topic, tone| CREW
+    WEB --> FAST
+    ST --> CREW
     FAST --> CREW
-    CREW --> T1 --> R
-    R --> TAV
-    R --> GEM
-    T1 -->|ResearchDossier| T2
-    T2 --> W --> GEM
-    T2 -->|borrador| T3
-    T3 --> E --> GEM
-    T3 -->|final| FAST
+    CREW --> T1
+    T1 --> AG_R
+    AG_R --> TAV
+    AG_R --> GEM
+    T1 --> T2
+    T2 --> AG_W
+    AG_W --> GEM
+    T2 --> T3
+    T3 --> AG_E
+    AG_E --> GEM
+    T3 --> FAST
     FAST --> WEB
     CREW --> OUT
     CREW --> LOG
