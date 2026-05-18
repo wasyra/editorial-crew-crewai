@@ -1,0 +1,39 @@
+{
+  "name": "web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "veta:add": "node scripts/veta-add.mjs"
+  },
+  "dependencies": {
+    "next": "^15.1.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "lucide-react": "^0.511.0",
+    "motion": "^11.15.0",
+    "@vetaui/foundations": "latest",
+    "@vetaui/atoms": "latest",
+    "@vetaui/molecules": "latest",
+    "@vetaui/organisms": "latest",
+    "@vetaui/templates": "latest",
+    "@vetaui/forms-kit": "latest",
+    "@vetaui/feedback-kit": "latest",
+    "@vetaui/analytics-kit": "latest",
+    "@vetaui/email-kit": "latest",
+    "react-hook-form": "^7.54.0",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.0.0",
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "tailwindcss": "^4.0.0",
+    "typescript": "^5.7.0"
+  }
+}

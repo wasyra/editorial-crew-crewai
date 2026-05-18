@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "veta": {
+      "command": "npx",
+      "args": ["-y", "@vetaui/mcp"]
+    }
+  }
+}

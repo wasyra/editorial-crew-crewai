@@ -1,0 +1,55 @@
+@font-face {
+  font-family: "Veta Client Sans";
+  src:
+    local("Geist"),
+    local("Inter"),
+    local("SF Pro Text"),
+    local("Segoe UI");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Veta Client Mono";
+  src:
+    local("Geist Mono"),
+    local("JetBrains Mono"),
+    local("SF Mono"),
+    local("Menlo");
+  font-display: swap;
+}
+
+:root {
+  --veta-client-font-sans: "Veta Client Sans", "Geist", "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --veta-client-font-mono: "Veta Client Mono", "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --veta-client-accent: oklch(0.606 0.25 292.717);
+  --veta-client-accent-soft: oklch(0.946 0.033 307.174);
+  --veta-client-surface: oklch(0.985 0 0);
+}
+
+[data-veta-client] {
+  color-scheme: light dark;
+  font-family: var(--veta-client-font-sans);
+}
+
+[data-veta-client] body {
+  margin: 0;
+  background: var(--veta-bg-muted);
+  color: var(--veta-fg);
+}
+
+[data-veta-client] .font-mono {
+  font-family: var(--veta-client-font-mono);
+}
+
+.veta-client-shell {
+  background:
+    linear-gradient(180deg, var(--veta-client-surface), var(--veta-bg-muted) 28rem),
+    var(--veta-bg-muted);
+}
+
+.veta-client-shell::before {
+  display: block;
+  height: 4px;
+  background: linear-gradient(90deg, var(--veta-client-accent), var(--veta-accent), var(--veta-success));
+  content: "";
+}

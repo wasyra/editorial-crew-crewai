@@ -1,0 +1,11 @@
+@import "tailwindcss";
+@source "./app/**/*.{ts,tsx}";
+@source "./components/**/*.{ts,tsx}";
+@source "../node_modules/@vetaui/templates/dist/**/*.js";
+@source "../node_modules/@vetaui/atoms/dist/**/*.js";
+@source "../node_modules/@vetaui/molecules/dist/**/*.js";
+@source "../node_modules/@vetaui/organisms/dist/**/*.js";
+@import "@vetaui/foundations/css";
+@import "@vetaui/foundations/reset";
+@import "@vetaui/foundations/presets/linear";
+@import "./theme.css";
